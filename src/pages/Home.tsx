@@ -103,18 +103,6 @@ export const Home: React.FC = () => {
             A minimalist, hyper-focused catalog of high-performance Android streaming utilities. Zero redirects, ad-free downloads straight from secure release builds.
           </p>
         </div>
-
-        {/* Quick Admin Navigation Link */}
-        <div className="flex items-center gap-3">
-          <Link
-            to="/admin"
-            className="flex items-center gap-2 border border-bg-surface hover:border-accent-indigo bg-bg-surface text-text-primary px-4 py-2 rounded-md text-xs font-medium transition-all duration-200"
-            id="btn-admin-panel"
-          >
-            <Settings size={14} className="text-accent-indigo" />
-            Admin Console
-          </Link>
-        </div>
       </div>
 
       {/* 2. Sandbox Mode Info Card */}
@@ -149,14 +137,8 @@ export const Home: React.FC = () => {
           <Database size={32} className="text-text-secondary/40 mb-3" />
           <h3 className="text-base font-semibold text-text-primary font-display">No Apps Published</h3>
           <p className="text-xs text-text-secondary mt-1 max-w-sm">
-            The store is currently empty. Head over to the Admin Console to register the first Android streaming app.
+            The store is currently empty. Check back soon.
           </p>
-          <Link
-            to="/admin"
-            className="mt-4 bg-accent-indigo text-text-primary text-xs font-medium px-4 py-2 rounded hover:bg-opacity-90 transition-all duration-200"
-          >
-            Go to Admin Dashboard
-          </Link>
         </div>
       ) : (
         <>

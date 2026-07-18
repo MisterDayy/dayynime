@@ -39,15 +39,6 @@ export default function App() {
               >
                 APP DIRECTORY
               </Link>
-              
-              <Link
-                to="/admin"
-                className="flex items-center gap-1.5 border border-bg-surface hover:border-accent-indigo bg-bg-surface text-text-primary px-3 py-1.5 rounded text-xs transition-colors"
-                id="btn-nav-admin"
-              >
-                <ShieldAlert size={12} className="text-accent-indigo" />
-                ADMIN GATEWAY
-              </Link>
             </div>
           </div>
         </header>
