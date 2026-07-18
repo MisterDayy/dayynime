@@ -1,0 +1,6 @@
+{
+  "name": "Dayynime Store",
+  "description": "A multi-app download portal website for Android streaming apps, featuring seamless downloads, release tracking, and a powerful admin control panel.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
