@@ -1,23 +1,17 @@
-@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600;8..60,700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
 @import "tailwindcss";
 
 @theme {
-  /* Warm near-black terminal surface, not the generic blue-black SaaS default */
-  --color-bg-base: #0D0E0A;
-  --color-bg-surface: #16180F;
-  --color-bg-raised: #1F2216;
-
-  --color-text-primary: #ECE9DC;
-  --color-text-secondary: #8B8F7C;
-
-  /* Signal = phosphor amber, the single working accent used throughout */
-  --color-accent-indigo: #E5A13C;
-  /* Latest/live marker only — used sparingly, never as a primary color */
-  --color-accent-rose: #E2607A;
-
-  --font-display: "JetBrains Mono", ui-monospace, monospace;
-  --font-body: "Source Serif 4", Georgia, serif;
-  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+  --color-bg-base: #0B0D12;
+  --color-bg-surface: #14171F;
+  --color-text-primary: #E8E9ED;
+  --color-text-secondary: #8B90A0;
+  --color-accent-indigo: #5B6CFF;
+  --color-accent-rose: #FF4D6D;
+  
+  --font-display: "Space Grotesk", var(--font-sans);
+  --font-body: "Inter", var(--font-sans);
+  --font-mono: "JetBrains Mono", var(--font-mono);
 }
 
 @layer base {
@@ -27,70 +21,22 @@
     font-family: var(--font-body);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    background-image:
-      linear-gradient(rgba(236, 233, 220, 0.028) 1px, transparent 1px);
-    background-size: 100% 3px;
   }
-
+  
+  /* Standard custom scrollbar to match the premium dark layout */
   ::-webkit-scrollbar {
     width: 6px;
     height: 6px;
   }
   ::-webkit-scrollbar-track {
-    background: #0D0E0A;
+    background: #0B0D12;
   }
   ::-webkit-scrollbar-thumb {
-    background: #2A2D1E;
+    background: #252A37;
     border-radius: 3px;
   }
   ::-webkit-scrollbar-thumb:hover {
-    background: #3B3F29;
-  }
-
-  :focus-visible {
-    outline: 2px solid var(--color-accent-indigo);
-    outline-offset: 2px;
+    background: #3B4459;
   }
 }
 
-@layer utilities {
-  .cursor-blink::after {
-    content: "";
-    display: inline-block;
-    width: 0.55em;
-    height: 1em;
-    margin-left: 2px;
-    background: var(--color-accent-indigo);
-    vertical-align: text-bottom;
-    animation: blink 1.1s steps(1) infinite;
-  }
-
-  @keyframes blink {
-    0%, 45% { opacity: 1; }
-    50%, 100% { opacity: 0; }
-  }
-
-  .live-dot {
-    position: relative;
-  }
-  .live-dot::before {
-    content: "";
-    position: absolute;
-    inset: -4px;
-    border-radius: 999px;
-    background: var(--color-accent-indigo);
-    opacity: 0.35;
-    animation: pulse-ring 2.2s ease-out infinite;
-  }
-  @keyframes pulse-ring {
-    0% { transform: scale(0.6); opacity: 0.45; }
-    100% { transform: scale(2.1); opacity: 0; }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .cursor-blink::after,
-    .live-dot::before {
-      animation: none;
-    }
-  }
-}
