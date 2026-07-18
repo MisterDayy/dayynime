@@ -18,9 +18,11 @@ export default function App() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
             {/* Logo */}
             <Link to="/" className="flex items-center gap-2.5 group">
-              <div className="w-8 h-8 rounded-md bg-accent-indigo flex items-center justify-center text-bg-base font-bold font-display tracking-tighter group-hover:scale-102 transition-transform">
-                D
-              </div>
+              <img
+                src="/icon-192.png"
+                alt="Dayynime"
+                className="w-8 h-8 rounded-md object-cover group-hover:scale-102 transition-transform"
+              />
               <div>
                 <span className="font-bold tracking-tight font-display text-text-primary group-hover:text-accent-indigo transition-colors">
                   Dayynime
