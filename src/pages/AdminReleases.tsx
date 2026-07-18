@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import { AppData, ReleaseData } from "../types";
 import { dbService } from "../lib/supabase";
+import { MarkdownLite } from "../lib/markdown";
 import { 
   ArrowLeft, 
   Plus, 
@@ -307,7 +308,7 @@ export const AdminReleases: React.FC = () => {
                   {rel.changelog && (
                     <div className="mt-2.5 border-t border-bg-surface/40 pt-2.5 text-xs text-text-secondary/80 font-body leading-relaxed max-h-[80px] overflow-y-auto pr-1">
                       <p className="font-mono text-[9px] text-text-secondary uppercase mb-1">Changelog Preview</p>
-                      <p className="whitespace-pre-line text-[11px]">{rel.changelog}</p>
+                      <MarkdownLite text={rel.changelog} className="text-[11px] space-y-1" />
                     </div>
                   )}
 

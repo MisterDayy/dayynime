@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { dbService } from "../lib/supabase";
 import { AppData } from "../types";
@@ -11,8 +11,15 @@ import {
   Link2, 
   Tag, 
   Compass,
-  CheckCircle
+  CheckCircle,
+  UploadCloud,
+  Loader2
 } from "lucide-react";
+
+// Set these to your own Cloudinary cloud name and UNSIGNED upload preset.
+// Never put an API secret here — this code runs in the browser.
+const CLOUDINARY_CLOUD_NAME = "dzfkklsza";
+const CLOUDINARY_UPLOAD_PRESET = "dayynime_icons";
 
 export const AdminAppForm: React.FC = () => {
   const { id } = useParams<{ id?: string }>();
@@ -25,6 +32,35 @@ export const AdminAppForm: React.FC = () => {
   const [iconUrl, setIconUrl] = useState<string>("");
   const [category, setCategory] = useState<string>("Anime Streamer");
   const [isPublished, setIsPublished] = useState<boolean>(true);
+  const [uploading, setUploading] = useState<boolean>(false);
+  const [uploadError, setUploadError] = useState<string>("");
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const handleIconUpload = async (file: File) => {
+    setUploading(true);
+    setUploadError("");
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("upload_preset", CLOUDINARY_UPLOAD_PRESET);
+
+      const res = await fetch(
+        `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/image/upload`,
+        { method: "POST", body: formData }
+      );
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data?.error?.message || "Upload failed");
+      }
+
+      setIconUrl(data.secure_url);
+    } catch (err: any) {
+      setUploadError(err.message || "Upload gagal, coba lagi.");
+    } finally {
+      setUploading(false);
+    }
+  };
 
   const [loading, setLoading] = useState<boolean>(false);
   const [fetching, setFetching] = useState<boolean>(false);
@@ -251,19 +287,59 @@ export const AdminAppForm: React.FC = () => {
               <label className="text-xs font-mono text-text-secondary uppercase block mb-1.5 font-semibold">
                 Icon URL / Cover Link
               </label>
+
+              {/* Upload button */}
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept="image/*"
+                className="hidden"
+                onChange={(e) => {
+                  const file = e.target.files?.[0];
+                  if (file) handleIconUpload(file);
+                }}
+              />
+              <button
+                type="button"
+                disabled={uploading}
+                onClick={() => fileInputRef.current?.click()}
+                className="w-full flex items-center justify-center gap-2 border border-dashed border-bg-surface hover:border-accent-indigo text-text-secondary hover:text-text-primary text-xs font-mono py-3 rounded-md transition-all mb-2 disabled:opacity-60"
+              >
+                {uploading ? (
+                  <>
+                    <Loader2 size={14} className="animate-spin" /> Uploading...
+                  </>
+                ) : (
+                  <>
+                    <UploadCloud size={14} /> Upload icon from device
+                  </>
+                )}
+              </button>
+              {uploadError && (
+                <p className="text-[10px] text-red-400 mb-2 font-mono">{uploadError}</p>
+              )}
+
+              {iconUrl && (
+                <img
+                  src={iconUrl}
+                  alt="Icon preview"
+                  className="w-12 h-12 rounded-md object-cover mb-2 border border-bg-surface"
+                />
+              )}
+
               <div className="relative">
                 <Link2 className="absolute left-3 top-1/2 -translate-y-1/2 text-text-secondary" size={14} />
                 <input
                   type="url"
                   required
-                  placeholder="e.g. https://images.unsplash.com/..."
+                  placeholder="or paste an image URL directly"
                   value={iconUrl}
                   onChange={(e) => setIconUrl(e.target.value)}
                   className="w-full bg-bg-base border border-bg-surface focus:border-accent-indigo text-text-primary text-xs outline-none pl-9 pr-4 py-2.5 rounded-md transition-all font-mono"
                 />
               </div>
               <p className="text-[10px] text-text-secondary/60 mt-1 font-mono">
-                Image link. Copy any Unsplash photo or CDN path for the app logo.
+                Upload a file above, or paste an image link directly.
               </p>
             </div>
           </div>

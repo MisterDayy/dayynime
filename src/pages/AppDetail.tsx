@@ -3,6 +3,7 @@ import { useParams, Link } from "react-router-dom";
 import { AppData, ReleaseData } from "../types";
 import { dbService } from "../lib/supabase";
 import { WaveformBar } from "../components/WaveformBar";
+import { MarkdownLite } from "../lib/markdown";
 import { 
   ArrowLeft, 
   Download, 
@@ -270,20 +271,9 @@ export const AppDetail: React.FC = () => {
                           Changelog & Improvements
                         </span>
                         
-                        <div className="text-xs text-text-secondary font-body leading-relaxed space-y-1.5 whitespace-pre-wrap">
+                        <div className="text-xs text-text-secondary font-body leading-relaxed space-y-1.5">
                           {rel.changelog ? (
-                            rel.changelog.split("\n").map((line, lIdx) => {
-                              // If it starts with dash or bullet, style it nicely
-                              const isBullet = line.trim().startsWith("-") || line.trim().startsWith("*");
-                              return (
-                                <p 
-                                  key={lIdx} 
-                                  className={isBullet ? "pl-2.5 relative before:content-['•'] before:absolute before:left-0 before:text-accent-indigo" : ""}
-                                >
-                                  {isBullet ? line.replace(/^[-*]\s*/, "") : line}
-                                </p>
-                              );
-                            })
+                            <MarkdownLite text={rel.changelog} className="space-y-1.5" />
                           ) : (
                             <span className="text-[11px] italic text-text-secondary/50">No changelog registered for this build.</span>
                           )}
