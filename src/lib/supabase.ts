@@ -137,19 +137,26 @@ export const dbService = {
   async login(email: string, password: string): Promise<{ success: boolean; error?: string; user?: any }> {
     if (isSupabaseConfigured && supabase) {
       const { data, error } = await supabase.auth.signInWithPassword({ email, password });
-      if (error) return { success: false, error: error.message };
-      
+      if (error) return { success: false, error: `Auth error: ${error.message} (status ${error.status ?? "?"})` };
+
+      const uid = data.user?.id;
+
       // Check if this authenticated user exists in the public.admins table
       const { data: adminRecord, error: adminError } = await supabase
         .from("admins")
         .select("id")
-        .eq("id", data.user?.id)
-        .single();
+        .eq("id", uid)
+        .maybeSingle();
 
-      if (adminError || !adminRecord) {
+      if (adminError) {
+        await supabase.auth.signOut();
+        return { success: false, error: `Admin check failed: ${adminError.message} (code ${adminError.code}). Your UID: ${uid}` };
+      }
+
+      if (!adminRecord) {
         // Sign out if not an admin
         await supabase.auth.signOut();
-        return { success: false, error: "Access Denied: You do not have administrator permissions." };
+        return { success: false, error: `Access Denied: UID ${uid} was not found in the admins table.` };
       }
 
       return { success: true, user: data.user };
